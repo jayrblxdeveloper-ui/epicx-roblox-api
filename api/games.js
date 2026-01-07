@@ -1,4 +1,13 @@
 export default async function handler(req, res) {
+  // CORS FIX
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   const gameIds = [
     "7126264355",
     "7150991427",
@@ -31,7 +40,8 @@ export default async function handler(req, res) {
     });
 
     res.status(200).json(games);
-  } catch {
+  } catch (err) {
+    console.error("Roblox API failed:", err);
     res.status(500).json({ error: "Failed to fetch Roblox data" });
   }
 }
